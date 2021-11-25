@@ -20,6 +20,8 @@ class Text(tk.Frame):
     
     def buatTombol(self):
         tk.Button(self.frm, text='Open', relief='groove', command=self.openFile).pack(side=tk.LEFT)
+        tk.Button(self.frm, text='Save', relief='groove', command=self.perintahSimpan).pack(side=tk.LEFT)
+        tk.Button(self.frm, text='Exit', relief='groove', command=self.perintahKeluar).pack(side=tk.LEFT)
     
     def kolomTeksUtama(self):
         scroll = tk.Scrollbar(self)
@@ -30,7 +32,26 @@ class Text(tk.Frame):
         kolomTeks.pack(side=tk.LEFT, expand=tk.YES, fill=tk.BOTH)
         self.kolomTeks = kolomTeks
         self.pack(expand=tk.YES, fill=tk.BOTH)
-
+    
+    def perintahSimpan(self):
+        print(self.path)
+        if self.path:
+            alltext = self.gettext()
+            open(self.path, 'w').write(alltext)
+            messagebox.showinfo('Berhasil', 'file telah disimpan')
+        else:
+            tipeFile = [('Text File', '*.txt'), ('Python file', '*.py'),('All files','.*')]
+            filename = asksaveasfilename(filetypes=(tipeFile))
+            if filename:
+                alltext = self.gettext()
+                open(filename, 'w').write(alltext)
+                self.path = filename
+    
+    def perintahKeluar(self):
+        ans = askokcancel('Exit', 'Anda yakin mau keluar?')
+        if ans:
+            tk.Frame.quit(self)
+    
     def settext(self, text='', file=None):
         if file:
             text = open(file, 'r').read()
